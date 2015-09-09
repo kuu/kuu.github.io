@@ -12,9 +12,29 @@
   </head>
   <body>
     <div class="mdl-layout__container" id="myoo-app"></div>
+    <template class="myoo-player__ui-template">
+      <div class="mdl-layout__container myoo-player__ui">
+        <div class="myoo-player__ui-left">
+          <button class="myoo-button__primary--large play-button" value="play">Play</button>
+          <span>Current Time:</span><span class="current-time"></span>
+          <span>Duration:</span><span class="duration"></span>
+        </div>
+        <div class="myoo-player__ui-right myoo-clearfix">
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--full-width myoo-textfield--icon">
+            <input class="mdl-textfield__input" type="title" id="title-edit" />
+            <label class="mdl-textfield__label" for="title-edit">
+              <span>Title</span>
+              <span><i class="material-icons">edit</i></span>
+            </label>
+          </div>
+        </span>
+      </div>
+    </template>
     <script src="scripts/vendor/material.min.js"></script>
     <script src="scripts/vendor/react.min.js"></script>
     <script src="scripts/vendor/Flux.min.js"></script>
+    <script src="scripts/vendor/fetch.js"></script>
+    <script src="scripts/vendor/sha256.min.js"></script>
     <script src="scripts/app.js"></script>
   </body>
 </html>
