@@ -15,9 +15,12 @@
     <template class="myoo-player__ui-template">
       <div class="mdl-layout__container myoo-player__ui">
         <div class="myoo-player__ui-left">
-          <button class="myoo-button__primary--large play-button" value="play">Play</button>
+          <button class="myoo-button__primary--large play-button" value="play" disabled>Play</button>
           <span>Current Time:</span><span class="current-time"></span>
           <span>Duration:</span><span class="duration"></span>
+          <p>
+            <input class="mdl-slider mdl-js-slider myoo-player__slider" type="range" disabled />
+          </p>
         </div>
         <div class="myoo-player__ui-right">
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--full-width myoo-textfield--icon">
