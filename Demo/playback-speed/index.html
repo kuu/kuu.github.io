@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Playback Speed Demo</title>
+</head>
+<body>
+  <div>
+    <div>
+      <video src="test.mp4"></video>
+    </div>
+    <div>
+      <button>Play</button>
+    </div>
+    <div>
+      <label><input type="checkbox" disabled>Speed x 2</label>
+    </div>
+  </div>
+  <script>
+    var btn = document.querySelector('button'),
+        chk = document.querySelector('input'),
+        vid = document.querySelector('video');
+
+    vid.addEventListener('canplay', function () {
+      chk.disabled = false;
+    }, false);
+
+    btn.addEventListener('click', function () {
+      if (btn.textContent === 'Pause') {
+        vid.pause();
+        btn.textContent = 'Play';
+      } else {
+        vid.play();
+        btn.textContent = 'Pause';
+      }
+    }, false);
+
+    vid.addEventListener('ended', function () {
+      btn.textContent = 'Play';
+    }, false);
+
+    chk.addEventListener('change', function () {
+      if (chk.checked) {
+        vid.playbackRate = 2;
+      } else {
+        vid.playbackRate = 1;
+      }
+    }, false);
+  </script>
+</body>
