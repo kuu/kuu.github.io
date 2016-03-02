@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ooyala Standalone IQ demo</title>
+  <script src="//analytics.ooyala.com/static/analytics.js"></script>
+</head>
+<body>
+  <div>
+    <video src="//cms.ooyala.com/Fza2dweTrquRJWNwSIWncgnTjVeQq9lF%2F0000000000000-0000016682041?Signature=7AnjQ6Xy43H%2BBiVzClBGH3CyS0c%3D&Expires=1457168090&AWSAccessKeyId=AKIAJUAIW2RNELHXXF2Q&" width="640" height="360"></video>
+  </div>
+  <button disabled>Play</button>
+  <script>
+    var pCode = 'BtbmUyOlamRiH-S0S-iUeNvf_ghr';
+    var embedCode = 'Fza2dweTrquRJWNwSIWncgnTjVeQq9lF';
+    var reporter = new Ooyala.Analytics.Reporter(pCode, {
+      playerName: "vanilla",
+      playerVersion: "0.0.000",
+      contentType: Ooyala.Analytics.MediaContentType.OOYALA_CONTENT // Miss configuration will fall into EXTERNAL_CONTENT.
+    });
+
+    reporter.reportPlayerLoad();
+    reporter.initializeMedia(embedCode);
+
+    var video = document.querySelector('video');
+    var button = document.querySelector('button');
+    var timer, paused = false;
+
+    video.addEventListener('canplay', function () {
+      console.log('reporter.setMediaDuration(' + video.duration + ');');
+      reporter.setMediaDuration(video.duration);
+      button.disabled = false;
+    }, false);
+
+    button.addEventListener('click', function () {
+      if (button.textContent === 'Play') {
+        video.play();
+        if (!paused) {
+          console.log('reporter.reportPlayRequested();');
+          reporter.reportPlayRequested();
+        }
+        button.textContent = 'Pause';
+        timer = setInterval(onTimer, 1000);
+      } else {
+        video.pause();
+        button.textContent = 'Play';
+        clearInterval(timer);
+      }
+    }, false);
+
+    video.addEventListener('play', function () {
+      if (paused) {
+        console.log('reporter.reportResume();');
+        reporter.reportResume();
+        paused = false;
+      } else {
+        console.log('reporter.reportPlaybackStarted();');
+        reporter.reportPlaybackStarted();
+      }
+    }, false);
+
+    video.addEventListener('pause', function () {
+      console.log('reporter.reportPause();');
+      reporter.reportPause();
+      paused = true;
+    }, false);
+
+    video.addEventListener('ended', function () {
+      console.log('reporter.reportComplete();');
+      reporter.reportComplete();
+      button.disabled = true;
+      clearInterval(timer);
+    }, false);
+
+    function onTimer() {
+      console.log('reporter.reportPlayHeadUpdate(' + Math.floor(video.currentTime * 1000) + ');');
+      reporter.reportPlayHeadUpdate(Math.floor(video.currentTime * 1000));
+    }
+
+  </script>
+</body>
+</html>
