@@ -590,16 +590,24 @@ var ControlBar = React.createClass({displayName: "ControlBar",
     this.props.controller.togglePlayPause();
   },
 
+  handleLiveClick: function() {
+    this.props.controller.setRelativePosition(0);
+  },
+
   handleBackwards: function() {
     var currentPlayheadTime = parseInt(this.props.currentPlayhead);
-    currentPlayheadTime = isFinite(currentPlayheadTime) && currentPlayheadTime >= 10 ? currentPlayheadTime - 10 : 0;
-    this.props.controller.seek(Math.max(currentPlayheadTime, 0));
+    currentPlayheadTime = isFinite(currentPlayheadTime) ? currentPlayheadTime - 10 : 0;
+    if (currentPlayheadTime >= 0) {
+      this.props.controller.seek(Math.max(currentPlayheadTime, 0));
+    }
   },
 
   handleForwards: function() {
     var currentPlayheadTime = parseInt(this.props.currentPlayhead);
     currentPlayheadTime = isFinite(currentPlayheadTime) ? currentPlayheadTime + 10 : 0;
-    this.props.controller.seek(currentPlayheadTime);
+    if (currentPlayheadTime <= this.props.duration) {
+      this.props.controller.seek(currentPlayheadTime);
+    }
   },
 
   handleShareClick: function() {
@@ -735,7 +743,17 @@ var ControlBar = React.createClass({displayName: "ControlBar",
     var videoQualityPopover = this.state.showVideoQualityPopover ? React.createElement(VideoQualityPopover, React.__spread({},  this.props, {togglePopoverAction: this.toggleQualityPopover})) : null;
     var durationSetting = {color: this.props.skinConfig.controlBar.iconStyle.inactive.color};
     var watermarkUrl = this.props.skinConfig.controlBar.watermark.imageResource.url;
-    var currentPlayheadTime = isFinite(parseInt(this.props.currentPlayhead)) ? Utils.formatSeconds(parseInt(this.props.currentPlayhead)) : null;
+    var currentPlayheadTime;
+    if (this.props.authorization.streams[0].is_live_stream) {
+      var relativePosition = this.props.controller.state.relativePosition;
+      if (relativePosition < 0) {
+        currentPlayheadTime = '-' + Utils.formatSeconds(-relativePosition);
+      } else {
+        currentPlayheadTime = 'LIVE';
+      }
+    } else {
+      urrentPlayheadTime = isFinite(parseInt(this.props.currentPlayhead)) ? Utils.formatSeconds(parseInt(this.props.currentPlayhead)) : null;
+    }
     var totalTimeContent = this.props.authorization.streams[0].is_live_stream ? null : React.createElement("span", {className: "oo-total-time"}, totalTime);
 
     // TODO: Update when implementing localization
@@ -762,7 +780,7 @@ var ControlBar = React.createClass({displayName: "ControlBar",
           onMouseOver: this.highlight, onMouseOut: this.removeHighlight}))
       ),
 
-      "live": React.createElement("div", {className: "oo-live oo-control-bar-item", key: "live"}, 
+      "live": React.createElement("div", {className: "oo-live oo-control-bar-item", onClick: this.handleLiveClick, key: "live"}, 
         React.createElement("div", {className: "oo-live-indicator"}, 
           React.createElement("div", {className: "oo-live-circle"}), 
           React.createElement("span", {className: "oo-live-text"}, " ", liveText)
@@ -2997,7 +3015,7 @@ OO.plugin("Html5Skin", function (OO, _, $, W) {
 
   if (OO.publicApi && OO.publicApi.VERSION) {
     // This variable gets filled in by the build script
-    OO.publicApi.VERSION.skin_version = "820a62229d5808d2e5135e54f11d82c24d421824";
+    OO.publicApi.VERSION.skin_version = "1a9eb878d0eb565188cc0139c732009a4a5ec5e8";
   }
 
   var Html5Skin = function (mb, id) {
@@ -3087,7 +3105,8 @@ OO.plugin("Html5Skin", function (OO, _, $, W) {
       "isInitialPlay": false,
       "isFullScreenSupported": false,
       "isVideoFullScreenSupported": false,
-      "isFullWindow": false
+      "isFullWindow": false,
+      "relativePosition": 0
     };
 
     this.init();
@@ -3331,6 +3350,11 @@ OO.plugin("Html5Skin", function (OO, _, $, W) {
         }
       }
       if (!this.state.seeking) {
+        var isLive = this.state.authorization ? this.state.authorization.streams[0].is_live_stream : false;
+        if (isLive) {
+          // Needed due to a bug (currentPlayhead is not updated properly with live streams)
+          currentPlayhead = duration + this.state.relativePosition;
+        }
         this.skin.updatePlayhead(currentPlayhead, duration, buffered);
       } else {
         this.state.queuedPlayheadUpdate = [currentPlayhead, duration, buffered];
@@ -3949,6 +3973,7 @@ OO.plugin("Html5Skin", function (OO, _, $, W) {
     },
 
     togglePlayPause: function() {
+      var isLive = this.state.authorization ? this.state.authorization.streams[0].is_live_stream : false;
       switch (this.state.playerState) {
         case CONSTANTS.STATE.START:
           this.mb.publish(OO.EVENTS.INITIAL_PLAY);
@@ -3967,15 +3992,28 @@ OO.plugin("Html5Skin", function (OO, _, $, W) {
           }
           break;
         case CONSTANTS.STATE.PAUSE:
+          if (isLive && this.state.pausedTime) {
+            this.state.relativePosition -= Math.floor((new Date().getTime() - this.state.pausedTime) / 1000);
+            this.state.relativePosition = Math.max(this.state.relativePosition, -this.state.duration);
+            this.state.pausedTime = 0;
+          }
           this.mb.publish(OO.EVENTS.PLAY);
           break;
         case CONSTANTS.STATE.PLAYING:
+          if (isLive) {
+            this.state.pausedTime = new Date().getTime();
+          }
           this.mb.publish(OO.EVENTS.PAUSE);
           break;
       }
     },
 
     seek: function(seconds) {
+      var isLive = this.state.authorization ? this.state.authorization.streams[0].is_live_stream : false;
+      if (isLive) {
+        this.state.relativePosition = Math.min(seconds - this.skin.state.duration, 0);
+        this.state.relativePosition = Math.max(this.state.relativePosition, -this.state.duration);
+      }
       this.mb.publish(OO.EVENTS.SEEK, seconds);
       if (this.state.screenToShow == CONSTANTS.SCREEN.END_SCREEN) {
         this.state.pauseAnimationDisabled = true;
@@ -4245,6 +4283,13 @@ OO.plugin("Html5Skin", function (OO, _, $, W) {
       if(this.state.mainVideoAspectRatio > 0 && this.state.mainVideoAspectRatio <= 100) {
         this.state.mainVideoInnerWrapper.css("padding-top", this.state.mainVideoAspectRatio+"%");
       }
+    },
+
+    // For detecting whether the viewer is on top of the live stream
+    // Set whenever a repositioning or pause/resume is done.
+    setRelativePosition: function(relativePos) {
+      var diff = relativePos - this.state.relativePosition;
+      this.seek(this.skin.state.currentPlayhead + diff);
     }
   };
 
