@@ -743,8 +743,9 @@ var ControlBar = React.createClass({displayName: "ControlBar",
     var videoQualityPopover = this.state.showVideoQualityPopover ? React.createElement(VideoQualityPopover, React.__spread({},  this.props, {togglePopoverAction: this.toggleQualityPopover})) : null;
     var durationSetting = {color: this.props.skinConfig.controlBar.iconStyle.inactive.color};
     var watermarkUrl = this.props.skinConfig.controlBar.watermark.imageResource.url;
+    var isLive = this.props.authorization.streams[0].is_live_stream;
     var currentPlayheadTime;
-    if (this.props.authorization.streams[0].is_live_stream) {
+    if (isLive) {
       var relativePosition = this.props.controller.state.relativePosition;
       if (relativePosition < 0) {
         currentPlayheadTime = '-' + Utils.formatSeconds(-relativePosition);
@@ -752,9 +753,9 @@ var ControlBar = React.createClass({displayName: "ControlBar",
         currentPlayheadTime = 'LIVE';
       }
     } else {
-      urrentPlayheadTime = isFinite(parseInt(this.props.currentPlayhead)) ? Utils.formatSeconds(parseInt(this.props.currentPlayhead)) : null;
+      currentPlayheadTime = isFinite(parseInt(this.props.currentPlayhead)) ? Utils.formatSeconds(parseInt(this.props.currentPlayhead)) : null;
     }
-    var totalTimeContent = this.props.authorization.streams[0].is_live_stream ? null : React.createElement("span", {className: "oo-total-time"}, totalTime);
+    var totalTimeContent = isLive ? null : React.createElement("span", {className: "oo-total-time"}, totalTime);
 
     // TODO: Update when implementing localization
     var liveText = Utils.getLocalizedString(this.props.language, CONSTANTS.SKIN_TEXT.LIVE, this.props.localizableStrings);
