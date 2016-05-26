@@ -3016,7 +3016,7 @@ OO.plugin("Html5Skin", function (OO, _, $, W) {
 
   if (OO.publicApi && OO.publicApi.VERSION) {
     // This variable gets filled in by the build script
-    OO.publicApi.VERSION.skin_version = "1a9eb878d0eb565188cc0139c732009a4a5ec5e8";
+    OO.publicApi.VERSION.skin_version = "9e48bba572cb43454ba9e28995be6c51ac0b8061";
   }
 
   var Html5Skin = function (mb, id) {
@@ -4290,7 +4290,9 @@ OO.plugin("Html5Skin", function (OO, _, $, W) {
     // Set whenever a repositioning or pause/resume is done.
     setRelativePosition: function(relativePos) {
       var diff = relativePos - this.state.relativePosition;
-      this.seek(this.skin.state.currentPlayhead + diff);
+      if (diff) {
+        this.seek(this.skin.state.currentPlayhead + diff);
+      }
     }
   };
 
