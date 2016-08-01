@@ -1444,7 +1444,6 @@ var ControlBar = React.createClass({displayName: "ControlBar",
 
     return (
       React.createElement("div", {className: controlBarClass, onMouseUp: this.handleControlBarMouseUp, onTouchEnd: this.handleControlBarMouseUp}, 
-        React.createElement(ScrubberBar, React.__spread({},  this.props)), 
 
         React.createElement("div", {className: "oo-control-bar-items-wrapper"}, 
           controlBarItems
@@ -4132,7 +4131,7 @@ OO.plugin("Html5Skin", function (OO, _, $, W) {
 
   if (OO.publicApi && OO.publicApi.VERSION) {
     // This variable gets filled in by the build script
-    OO.publicApi.VERSION.skin = {"releaseVersion": "4.5.5", "rev": "94083652505efdbb526a9380d91028577893df6e"};
+    OO.publicApi.VERSION.skin = {"releaseVersion": "4.5.5", "rev": "53baaa2ccd731bd9b4a166a6f6836f9df153c48b"};
   }
 
   var Html5Skin = function (mb, id) {
@@ -5171,7 +5170,7 @@ OO.plugin("Html5Skin", function (OO, _, $, W) {
           this.mb.publish(OO.EVENTS.PLAY);
           break;
         case CONSTANTS.STATE.PLAYING:
-          this.mb.publish(OO.EVENTS.PAUSE);
+          // this.mb.publish(OO.EVENTS.PAUSE);
           break;
       }
     },
@@ -6569,7 +6568,7 @@ var PlayingScreen = React.createClass({displayName: "PlayingScreen",
 
       React.createElement("div", {className: "oo-state-screen-selectable", onMouseUp: this.handlePlayerMouseUp, onTouchEnd: this.handleTouchEnd}), 
 
-      React.createElement("div", {className: "oo-playing-overlay"}), 
+      !this.isMobile && this.props.fullscreen ? React.createElement("div", {className: "oo-playing-overlay-large"}) : React.createElement("div", {className: "oo-playing-overlay"}), 
 
       React.createElement("div", {className: "oo-interactive-container"}, 
 
