@@ -6566,7 +6566,7 @@ var PlayingScreen = React.createClass({displayName: "PlayingScreen",
 
       this.props.controller.state.buffering ? React.createElement(Spinner, {loadingImage: this.props.skinConfig.general.loadingImage.imageResource.url}) : null, 
 
-      !this.isMobile && this.props.fullscreen ? React.createElement("div", {className: "oo-playing-overlay-large"}) : React.createElement("div", {className: "oo-playing-overlay-normal"}), 
+      "//", !this.isMobile && this.props.fullscreen ? React.createElement("div", {className: "oo-playing-overlay-large"}) : React.createElement("div", {className: "oo-playing-overlay-normal"}), 
 
       React.createElement("div", {className: "oo-interactive-container"}, 
 
