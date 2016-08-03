@@ -1565,7 +1565,7 @@
   -o-transition: transition, opacity 0.2s ease-in-out, height 0.3s ease-in-out;
   transition: transition, opacity 0.2s ease-in-out, height 0.3s ease-in-out;
   width: 100%;
-  height: 30px;
+  height: 90px;
   position: relative;
   margin: 0;
   padding: 0 15px;
@@ -2082,7 +2082,7 @@
   top: 0;
   left: 0;
   right: 0;
-  bottom: 30px;
+  bottom: 90px;
   position: absolute;
   overflow: hidden;
   display: none; }
@@ -2098,7 +2098,7 @@
   top: 0;
   left: 0;
   right: 0;
-  bottom: 30px;
+  bottom: 90px;
   position: absolute;
   display: none; }
 
@@ -2822,16 +2822,16 @@
   margin-right: 7px; }
 
 .oo-player-container .oo-xsmall .oo-ad-overlay.oo-control-bar-visible {
-  bottom: 21px !important; }
+  bottom: 63px !important; }
 
 .oo-player-container .oo-xsmall .oo-up-next-panel-bottom {
-  bottom: 21px; }
+  bottom: 63px; }
 
 .oo-player-container .oo-xsmall .oo-player-skin-plugins {
-  bottom: 21px; }
+  bottom: 63px; }
 
 .oo-player-container .oo-xsmall .oo-player-skin-plugins-click-layer {
-  bottom: 21px; }
+  bottom: 63px; }
 
 .oo-player-container .oo-xsmall .oo-slider-volume {
   width: 140px; }
