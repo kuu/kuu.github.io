@@ -369,21 +369,18 @@
   height: 100%;
   overflow: hidden; }
 
-.oo-player-container .oo-playing-overlay {
-  background-image: url("assets/images/overlay.png");
+.oo-player-container .oo-playing-overlay, .oo-player-container .oo-playing-overlay-normal, .oo-player-container .oo-playing-overlay-large {
   background-position: right bottom;
   background-repeat: no-repeat;
   height: 100%;
   width: 100%;
   opacity: 0.5; }
 
+.oo-player-container .oo-playing-overlay-normal {
+  background-image: url("assets/images/overlay.png"); }
+
 .oo-player-container .oo-playing-overlay-large {
-  background-image: url("assets/images/overlay-large.png");
-  background-position: right bottom;
-  background-repeat: no-repeat;
-  height: 100%;
-  width: 100%;
-  opacity: 0.5; }
+  background-image: url("assets/images/overlay-large.png"); }
 
 .oo-player-container .oo-state-screen, .oo-player-container .oo-spinner-screen {
   overflow: hidden;
