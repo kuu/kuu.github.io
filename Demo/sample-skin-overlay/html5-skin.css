@@ -412,7 +412,8 @@
     cursor: default;
     background-color: white;
     opacity: 0;
-    filter: alpha(opacity=1); }
+    filter: alpha(opacity=1);
+    z-index: 10000; }
   .oo-player-container .oo-state-screen .oo-state-screen-poster, .oo-player-container .oo-spinner-screen .oo-state-screen-poster {
     width: 100%;
     top: 0;
