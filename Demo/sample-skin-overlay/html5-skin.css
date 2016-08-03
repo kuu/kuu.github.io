@@ -373,8 +373,7 @@
   background-position: right bottom;
   background-repeat: no-repeat;
   height: 100%;
-  width: 100%;
-  opacity: 0.5; }
+  width: 100%; }
 
 .oo-player-container .oo-playing-overlay-normal {
   background-image: url("assets/images/overlay.png"); }
