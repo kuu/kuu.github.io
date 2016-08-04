@@ -263,8 +263,7 @@
 
 @font-face {
   font-family: "ooyala-slick-type";
-  src: url("assets/fonts/ooyala-slick-type.eot");
-  src: url("assets/fonts/ooyala-slick-type.eot?#iefix") format("embedded-opentype"), url("assets/fonts/ooyala-slick-type.woff") format("woff"), url("assets/fonts/ooyala-slick-type.ttf") format("truetype"), url("assets/fonts/ooyala-slick-type.svg#alice") format("svg");
+  src: url("assets/fonts/ooyala-slick-type.woff") format("woff");
   font-weight: normal;
   font-style: normal; }
 
