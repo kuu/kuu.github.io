@@ -1432,7 +1432,7 @@ var ControlBar = React.createClass({displayName: "ControlBar",
 
     };
     if (this.props.isLiveStream) {
-      returnStyles.liveIndicatorStyle = 'top:' + (-5 * this.responsiveUIMultiple) + 'px';
+      returnStyles.liveIndicatorStyle = {top: (-5 * this.responsiveUIMultiple) + 'px'};
     }
     return returnStyles;
   },
