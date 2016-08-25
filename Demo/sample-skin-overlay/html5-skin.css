@@ -1641,7 +1641,6 @@
     .oo-player-container .oo-control-bar .oo-control-bar-items-wrapper .oo-live {
       cursor: default; }
     .oo-player-container .oo-control-bar .oo-control-bar-items-wrapper .oo-live-indicator {
-      top: -5px;
       position: relative; }
     .oo-player-container .oo-control-bar .oo-control-bar-items-wrapper .oo-live-circle {
       display: inline-block;
